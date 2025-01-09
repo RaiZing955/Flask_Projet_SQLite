@@ -77,22 +77,14 @@ def enregistrer_client():
     conn.close()
     return redirect('/consultation/')  # Rediriger vers la page d'accueil après l'enregistrement
 
-@app.route('/fiche_nom/', methods=['GET'])
-def search_client_by_name():
-    # Get the "name" parameter from the query string
-    name_query = request.args.get('name', '').lower()
-
-    # Validate input
-    if not name_query:
-      return render_template('read_data.html', data=data)
-
-    # Search for matching clients
-    matching_clients = [client for client in clients if name_query in client['name'].lower()]
-
-    if not matching_clients:
-        return jsonify({"message": "No clients found matching the given name."}), 404
-
-    return jsonify(matching_clients), 200
+@app.route('/fiche_nom/')
+def ReadBDD_2():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('search_data.html', data=data)
                                                                                                                                        
 if __name__ == "__main__":
   app.run(debug=True)
