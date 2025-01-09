@@ -84,7 +84,7 @@ def search_client_by_name():
 
     # Validate input
     if not name_query:
-        return jsonify({"error": "A 'name' query parameter is required."}), 400
+      return render_template('read_data.html', data=data)
 
     # Search for matching clients
     matching_clients = [client for client in clients if name_query in client['name'].lower()]
