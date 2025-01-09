@@ -1,0 +1,34 @@
+<!DOCTYPE>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Clients</title>
+</head>
+<body>
+
+<form action='fiche_nom/' method='post'>
+<input type='text' name='nom' placeholder='nom du client'>
+    <input type='submit' value='rechercher le nom'>
+</form>
+    
+    <h1>Rechercher un client</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Création</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Adresse</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
