@@ -100,8 +100,12 @@ def borrow_book():
         return jsonify({"error": "Book not available"}), 400
 
     # Enregistrer le prêt
-    cursor.execute('INSERT INTO borrows (user_id, book_id, borrow_date) VALUES (?, ?, DATE('now'))', (user_id, book_id))
-    cursor.execute('UPDATE books SET available = available - 1 WHERE id = ?', (book_id,))
+    cursor.execute('INSERT INTO borrows (user_id, book_id, borrow_date) VALUES (?, ?, CURRENT_DATE)', (user_id, book_id))
+    cursor.execute('UPDATE books SET available = available - 1 WHERE id = ? AND available > 0', (book_id,))
+affected_rows = cursor.rowcount
+if affected_rows == 0:
+    raise ValueError("Le livre n'est pas disponible.")
+
 
     conn.commit()
     conn.close()
