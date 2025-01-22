@@ -86,25 +86,7 @@ def ReadBDD_2():
     conn.close()
     return render_template('search_data.html', data=data)
 
-@app.route('/index')
-def index():
-    return render_template('index.html')
 
-@app.route('/add_book')
-def add_book_page():
-    return render_template('add_book.html')
-
-@app.route('/list_books')
-def list_books_page():
-    return render_template('list_books.html')
-
-@app.route('/add_user')
-def add_user_page():
-    return render_template('add_user.html')
-
-@app.route('/borrow_book')
-def borrow_book_page():
-    return render_template('borrow_book.html')
                                                                                                                                        
 if __name__ == "__main__":
   app.run(debug=True)
