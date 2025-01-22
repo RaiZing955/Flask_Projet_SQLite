@@ -86,7 +86,7 @@ def ReadBDD_2():
     conn.close()
     return render_template('search_data.html', data=data)
 
-@app.route('/bibliothèque', methods=['GET'])
+@app.route('/bibliothèque/', methods=['GET'])
 def formulaire_client():
     return render_template('bibliothèque.html')  # afficher le formulaire
                                                                                                                                        
