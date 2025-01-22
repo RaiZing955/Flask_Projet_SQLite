@@ -1,20 +1,44 @@
 import sqlite3
 
-connection = sqlite3.connect('database.db')
+# Connexion à la base de données
+connection = sqlite3.connect('bibliotheque.db')
 
-with open('schema.sql') as f:
+# Chargement du schéma SQL pour créer les tables
+with open('schema2.sql') as f:
     connection.executescript(f.read())
 
 cur = connection.cursor()
 
-cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('DUPONT', 'Emilie', '123, Rue des Lilas, 75001 Paris'))
-cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('LEROUX', 'Lucas', '456, Avenue du Soleil, 31000 Toulouse'))
-cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('MARTIN', 'Amandine', '789, Rue des Érables, 69002 Lyon'))
-cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('TREMBLAY', 'Antoine', '1010, Boulevard de la Mer, 13008 Marseille'))
-cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('LAMBERT', 'Sarah', '222, Avenue de la Liberté, 59000 Lille'))
-cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('GAGNON', 'Nicolas', '456, Boulevard des Cerisiers, 69003 Lyon'))
-cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('DUBOIS', 'Charlotte', '789, Rue des Roses, 13005 Marseille'))
-cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('LEFEVRE', 'Thomas', '333, Rue de la Paix, 75002 Paris'))
+# Insertion de livres
+cur.execute("INSERT INTO Livres (titre, auteur, categorie, quantite_totale, quantite_disponible) VALUES (?, ?, ?, ?, ?)",
+            ('1984', 'George Orwell', 'Fiction', 10, 10))
+cur.execute("INSERT INTO Livres (titre, auteur, categorie, quantite_totale, quantite_disponible) VALUES (?, ?, ?, ?, ?)",
+            ('Le Petit Prince', 'Antoine de Saint-Exupéry', 'Conte', 5, 5))
+cur.execute("INSERT INTO Livres (titre, auteur, categorie, quantite_totale, quantite_disponible) VALUES (?, ?, ?, ?, ?)",
+            ('Python pour les débutants', 'John Doe', 'Informatique', 7, 7))
+cur.execute("INSERT INTO Livres (titre, auteur, categorie, quantite_totale, quantite_disponible) VALUES (?, ?, ?, ?, ?)",
+            ('L’Alchimiste', 'Paulo Coelho', 'Roman', 8, 8))
+cur.execute("INSERT INTO Livres (titre, auteur, categorie, quantite_totale, quantite_disponible) VALUES (?, ?, ?, ?, ?)",
+            ('La Vie secrète des arbres', 'Peter Wohlleben', 'Science', 6, 6))
 
+# Insertion d'utilisateurs
+cur.execute("INSERT INTO Utilisateurs (nom, email, mot_de_passe, role) VALUES (?, ?, ?, ?)",
+            ('Admin', 'admin@bibliotheque.com', 'admin123', 'Administrateur'))
+cur.execute("INSERT INTO Utilisateurs (nom, email, mot_de_passe, role) VALUES (?, ?, ?, ?)",
+            ('Alice', 'alice@example.com', 'password1', 'Utilisateur'))
+cur.execute("INSERT INTO Utilisateurs (nom, email, mot_de_passe, role) VALUES (?, ?, ?, ?)",
+            ('Bob', 'bob@example.com', 'password2', 'Utilisateur'))
+cur.execute("INSERT INTO Utilisateurs (nom, email, mot_de_passe, role) VALUES (?, ?, ?, ?)",
+            ('Eve', 'eve@example.com', 'password3', 'Utilisateur'))
+cur.execute("INSERT INTO Utilisateurs (nom, email, mot_de_passe, role) VALUES (?, ?, ?, ?)",
+            ('Charlie', 'charlie@example.com', 'password4', 'Utilisateur'))
+
+# Insertion de prêts (optionnel)
+cur.execute("INSERT INTO Prets (utilisateur_id, livre_id, date_retour_prevue) VALUES (?, ?, ?)",
+            (2, 1, '2025-02-01'))
+cur.execute("INSERT INTO Prets (utilisateur_id, livre_id, date_retour_prevue) VALUES (?, ?, ?)",
+            (3, 2, '2025-02-05'))
+
+# Enregistrement des changements et fermeture de la connexion
 connection.commit()
 connection.close()
