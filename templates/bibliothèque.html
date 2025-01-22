@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliothèque</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+        main {
+            padding: 1em;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        section {
+            margin-bottom: 2em;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            margin: 1em 0;
+        }
+        input, select, button {
+            padding: 0.5em;
+            margin: 0.5em 0;
+            width: 100%;
+            max-width: 300px;
+            display: block;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gestion de Bibliothèque</h1>
+    </header>
+    <main>
+        <!-- Section pour l'enregistrement et la suppression de livres -->
+        <section>
+            <h2>Enregistrement et Suppression de Livres</h2>
+            <form id="addBookForm">
+                <h3>Ajouter un livre</h3>
+                <input type="text" name="titre" placeholder="Titre du livre" required>
+                <input type="text" name="auteur" placeholder="Auteur" required>
+                <input type="text" name="categorie" placeholder="Catégorie" required>
+                <input type="number" name="quantite" placeholder="Quantité" required>
+                <button type="submit">Ajouter</button>
+            </form>
+            <form id="deleteBookForm">
+                <h3>Supprimer un livre</h3>
+                <input type="number" name="id" placeholder="ID du livre" required>
+                <button type="submit">Supprimer</button>
+            </form>
+        </section>
+
+        <!-- Section pour la recherche de livres disponibles -->
+        <section>
+            <h2>Recherche de Livres Disponibles</h2>
+            <form id="searchBookForm">
+                <input type="text" name="query" placeholder="Rechercher un titre ou un auteur">
+                <button type="submit">Rechercher</button>
+            </form>
+            <div id="searchResults"></div>
+        </section>
+
+        <!-- Section pour l'emprunt de livres -->
+        <section>
+            <h2>Emprunt de Livres</h2>
+            <form id="borrowBookForm">
+                <input type="number" name="utilisateurId" placeholder="ID de l'utilisateur" required>
+                <input type="number" name="livreId" placeholder="ID du livre" required>
+                <button type="submit">Emprunter</button>
+            </form>
+        </section>
+
+        <!-- Section pour la gestion des utilisateurs -->
+        <section>
+            <h2>Gestion des Utilisateurs</h2>
+            <form id="addUserForm">
+                <h3>Ajouter un utilisateur</h3>
+                <input type="text" name="nom" placeholder="Nom" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="motDePasse" placeholder="Mot de passe" required>
+                <select name="role" required>
+                    <option value="Utilisateur">Utilisateur</option>
+                    <option value="Administrateur">Administrateur</option>
+                </select>
+                <button type="submit">Ajouter</button>
+            </form>
+        </section>
+
+        <!-- Section pour la gestion des stocks -->
+        <section>
+            <h2>Gestion des Stocks</h2>
+            <form id="updateStockForm">
+                <h3>Mettre à jour le stock</h3>
+                <input type="number" name="livreId" placeholder="ID du livre" required>
+                <input type="number" name="nouvelleQuantite" placeholder="Nouvelle quantité" required>
+                <button type="submit">Mettre à jour</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
 
