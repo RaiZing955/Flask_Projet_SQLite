@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Utilisateurs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestion des Utilisateurs</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Retour à l'Accueil</a></li>
+                <li><a href="gestion_livres.html">Gestion des Livres</a></li>
+                <li><a href="emprunt.html">Emprunt de Livre</a></li>
+                <li><a href="gestion_stocks.html">Gestion des Stocks</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section>
+        <h2>Ajouter un Utilisateur</h2>
+        <form action="/ajouter_utilisateur" method="POST">
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required>
+
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="role">Rôle :</label>
+            <select id="role" name="role" required>
+                <option value="utilisateur">Utilisateur</option>
+                <option value="administrateur">Administrateur</option>
+            </select>
+
+            <button type="submit">Ajouter</button>
+        </form>
+
+        <h2>Liste des Utilisateurs</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Liste des utilisateurs ici -->
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Bibliothèque en ligne</p>
+    </footer>
+</body>
+</html>
