@@ -1,121 +1,81 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session
+from flask import render_template
+from flask import json
+from urllib.request import urlopen
+from werkzeug.utils import secure_filename
 import sqlite3
 
-app = Flask(__name__)
+app = Flask(__name__)                                                                                                                  
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 
-# Fonction utilitaire pour vérifier si l'utilisateur est authentifié
+# Fonction pour créer une clé "authentifie" dans la session utilisateur
 def est_authentifie():
     return session.get('authentifie')
 
-# Décorateur pour protéger les routes
-def login_requis(f):
-    def wrapper(*args, **kwargs):
-        if not est_authentifie():
-            return redirect(url_for('authentification'))  # Rediriger vers la page d'authentification
-        return f(*args, **kwargs)
-    wrapper.__name__ = f.__name__  # Garde le nom de la fonction originale
-    return wrapper
-
-# Fonction utilitaire pour récupérer les données de la base de données
-def get_db_data(query, params=()):
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute(query, params)
-    data = cursor.fetchall()
-    conn.close()
-    return data
-
-# Route pour la page d'accueil (authentification)
 @app.route('/')
 def hello_world():
-    if est_authentifie():
-        return redirect(url_for('index'))  # Si déjà authentifié, rediriger vers la page des livres
-    return redirect(url_for('authentification'))  # Sinon, aller à la page d'authentification
+    return render_template('hello.html')
 
-# Route pour l'authentification
+@app.route('/lecture')
+def lecture():
+    if not est_authentifie():
+        # Rediriger vers la page d'authentification si l'utilisateur n'est pas authentifié
+        return redirect(url_for('authentification'))
+
+  # Si l'utilisateur est authentifié
+    return "<h2>Bravo, vous êtes authentifié</h2>"
+
 @app.route('/authentification', methods=['GET', 'POST'])
 def authentification():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        # Accepter n'importe quel utilisateur, ou ajouter une simple condition
-        if username and password:  # Vérifier si les champs ne sont pas vides
+        # Vérifier les identifiants
+        if request.form['username'] == 'admin' and request.form['password'] == 'password': # password à cacher par la suite
             session['authentifie'] = True
-            return redirect(url_for('index'))  # Rediriger vers la page des livres après authentification
+            # Rediriger vers la route lecture après une authentification réussie
+            return redirect(url_for('lecture'))
         else:
+            # Afficher un message d'erreur si les identifiants sont incorrects
             return render_template('formulaire_authentification.html', error=True)
+
     return render_template('formulaire_authentification.html', error=False)
 
-# Route pour la déconnexion
-@app.route('/deconnexion/')
-def deconnexion():
-    session.pop('authentifie', None)
-    return redirect(url_for('hello_world'))  # Rediriger vers la page d'accueil après déconnexion
+@app.route('/fiche_client/<int:post_id>')
+def Readfiche(post_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients WHERE id = ?', (post_id,))
+    data = cursor.fetchall()
+    conn.close()
+    # Rendre le template HTML et transmettre les données
+    return render_template('read_data.html', data=data)
 
-# Routes protégées (nécessitant une authentification)
-@app.route('/index/')
-@login_requis
-def index():
-    data = get_db_data('SELECT * FROM livres;')
-    return render_template('index.html', data=data)
-
-@app.route('/enregistrement/')
-@login_requis
-def enregistrement():
-    data = get_db_data('SELECT * FROM livres;')
-    return render_template('enregistrement_livre.html', data=data)
-
-@app.route('/recherche/')
-@login_requis
-def recherche():
-    data = get_db_data('SELECT * FROM livres WHERE quantite_disponible > 0;')
-    return render_template('recherche_livre.html', data=data)
-
-@app.route('/emprunt/')
-@login_requis
-def emprunt():
-    data = get_db_data('SELECT * FROM emprunts;')
-    return render_template('emprunt_livre.html', data=data)
-
-@app.route('/gestion/')
-@login_requis
-def gestion_stocks():
-    data = get_db_data('SELECT * FROM livres;')
-    return render_template('gestion_stocks.html', data=data)
-
-# Route pour afficher les clients (par exemple)
 @app.route('/consultation/')
-@login_requis
-def consultation():
-    data = get_db_data('SELECT * FROM clients;')
+def ReadBDD():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
     return render_template('read_data.html', data=data)
 
-# Route pour enregistrer un client
-@app.route('/enregistrer_client', methods=['GET', 'POST'])
-@login_requis
+@app.route('/enregistrer_client', methods=['GET'])
+def formulaire_client():
+    return render_template('formulaire.html')  # afficher le formulaire
+
+@app.route('/enregistrer_client', methods=['POST'])
 def enregistrer_client():
-    if request.method == 'POST':
-        nom = request.form['nom']
-        prenom = request.form['prenom']
-        adresse = request.form.get('adresse', 'Inconnu')
-        query = 'INSERT INTO clients (created, nom, prenom, adresse) VALUES (?, ?, ?, ?)'
-        params = (1002938, nom, prenom, adresse)
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-        cursor.execute(query, params)
-        conn.commit()
-        conn.close()
-        return redirect(url_for('consultation'))
-    return render_template('formulaire.html')
+    nom = request.form['nom']
+    prenom = request.form['prenom']
 
-# Route pour afficher la fiche d'un client
-@app.route('/fiche_client/<int:post_id>/')
-@login_requis
-def fiche_client(post_id):
-    data = get_db_data('SELECT * FROM clients WHERE id = ?', (post_id,))
-    return render_template('read_data.html', data=data)
+    # Connexion à la base de données
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
 
+    # Exécution de la requête SQL pour insérer un nouveau client
+    cursor.execute('INSERT INTO clients (created, nom, prenom, adresse) VALUES (?, ?, ?, ?)', (1002938, nom, prenom, "ICI"))
+    conn.commit()
+    conn.close()
+    return redirect('/consultation/')  # Rediriger vers la page d'accueil après l'enregistrement
+                                                                                                                                       
 if __name__ == "__main__":
-    app.run(debug=True)
+  app.run(debug=True)
