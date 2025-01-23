@@ -3,55 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page d'Accueil - Bibliothèque</title>
+    <title>Bienvenue à la Bibliothèque</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
+            background-color: #f4f4f4;
         }
         .container {
-            width: 80%;
-            margin: 0 auto;
-            padding-top: 50px;
+            margin-top: 50px;
         }
         h1 {
             text-align: center;
-            color: #333;
-        }
-        .links {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 50px;
-        }
-        .link-item {
-            padding: 15px 25px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .link-item:hover {
-            background-color: #2980b9;
+            margin-bottom: 30px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Bienvenue à la Bibliothèque</h1>
+<div class="container">
+    <h1>Bienvenue dans notre Bibliothèque</h1>
+    
+    <p>Bonjour et bienvenue dans notre bibliothèque en ligne ! Vous pouvez maintenant consulter, emprunter, et gérer vos livres préférés. Utilisez les liens ci-dessous pour accéder à différentes fonctionnalités.</p>
 
-        <div class="links">
-            <a href="{{ url_for('gestion_livres') }}" class="link-item">Gestion des Livres</a>
-            <a href="{{ url_for('emprunt') }}" class="link-item">Emprunt de Livres</a>
-            <a href="{{ url_for('gestion_utilisateurs') }}" class="link-item">Gestion des Utilisateurs</a>
-            <a href="{{ url_for('gestion_stocks') }}" class="link-item">Gestion des Stocks</a>
-            <a href="{{ url_for('consultation') }}" class="link-item">Consulter les Clients</a>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gestion des Livres</h5>
+                    <p class="card-text">Ajoutez, modifiez ou supprimez des livres de notre collection.</p>
+                    <a href="{{ url_for('gestion_livres') }}" class="btn btn-primary">Gérer les livres</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Emprunter un Livre</h5>
+                    <p class="card-text">Découvrez les livres disponibles et empruntez-les en toute simplicité.</p>
+                    <a href="{{ url_for('emprunt') }}" class="btn btn-primary">Emprunter un livre</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gestion des Utilisateurs</h5>
+                    <p class="card-text">Ajoutez, gérez et modifiez les utilisateurs du système.</p>
+                    <a href="{{ url_for('gestion_utilisateurs') }}" class="btn btn-primary">Gérer les utilisateurs</a>
+                </div>
+            </div>
         </div>
     </div>
 
-</body>
-</html>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gestion des Stocks</h5>
+                    <p class="card-text">Suivez l'état des stocks des livres disponibles à la bibliothèque.</p>
+                    <a href="{{ url_for('gestion_stocks') }}" class="btn btn-primary">Gérer les stocks</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{{ url_for('authentification') }}" class="btn btn-danger">Se déconnecter</a>
+    </div>
+</div>
