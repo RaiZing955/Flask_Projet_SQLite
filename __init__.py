@@ -87,7 +87,7 @@ def ReadBDD_2():
     return render_template('search_data.html', data=data)
 
 @app.route('/index/')
-def ReadBDD():
+def ReadBDD_3():
     conn = sqlite3.connect('bibliotheque.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients;')
@@ -96,7 +96,7 @@ def ReadBDD():
     return render_template('index.html', data=data)
 
 @app.route('/enregistrement/')
-def ReadBDD():
+def ReadBDD_4():
     conn = sqlite3.connect('bibliotheque.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients;')
@@ -105,7 +105,7 @@ def ReadBDD():
     return render_template('enregistrement.html', data=data)
 
 @app.route('/recherche/')
-def ReadBDD():
+def ReadBDD_5():
     conn = sqlite3.connect('bibliotheque.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients;')
@@ -114,7 +114,7 @@ def ReadBDD():
     return render_template('recherche.html', data=data)
 
 @app.route('/emprunt/')
-def ReadBDD():
+def ReadBDD_6():
     conn = sqlite3.connect('bibliotheque.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients;')
@@ -123,7 +123,7 @@ def ReadBDD():
     return render_template('emprunt.html', data=data)
 
 @app.route('/gestion/')
-def ReadBDD():
+def ReadBDD_7():
     conn = sqlite3.connect('bibliotheque.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients;')
