@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enregistrer un Livre</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Enregistrer un Nouveau Livre</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Retour à l'Accueil</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form action="enregistrer_livre.php" method="POST">
+            <label for="titre">Titre:</label>
+            <input type="text" id="titre" name="titre" required><br>
+
+            <label for="auteur">Auteur:</label>
+            <input type="text" id="auteur" name="auteur" required><br>
+
+            <label for="categorie">Catégorie:</label>
+            <input type="text" id="categorie" name="categorie"><br>
+
+            <label for="quantite_totale">Quantité Totale:</label>
+            <input type="number" id="quantite_totale" name="quantite_totale" required><br>
+
+            <label for="quantite_disponible">Quantité Disponible:</label>
+            <input type="number" id="quantite_disponible" name="quantite_disponible" required><br>
+
+            <button type="submit">Enregistrer</button>
+        </form>
+    </main>
+</body>
+</html>
