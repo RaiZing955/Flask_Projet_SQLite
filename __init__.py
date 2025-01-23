@@ -87,50 +87,33 @@ def ReadBDD_2():
     return render_template('search_data.html', data=data)
 
 @app.route('/index/')
-def ReadBDD_3():
-    conn = sqlite3.connect('bibliotheque.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients;')
-    data = cursor.fetchall()
-    conn.close()
+def index():
+    data = get_db_data('SELECT * FROM livres;')  # Exemple : affiche les livres dans l'accueil
     return render_template('index.html', data=data)
 
+# Route pour la page d'enregistrement des livres
 @app.route('/enregistrement/')
-def ReadBDD_4():
-    conn = sqlite3.connect('bibliotheque.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients;')
-    data = cursor.fetchall()
-    conn.close()
-    return render_template('enregistrement.html', data=data)
+def enregistrement():
+    data = get_db_data('SELECT * FROM livres;')  # Montre les livres disponibles à gérer
+    return render_template('enregistrement_livre.html', data=data)
 
+# Route pour la recherche de livres
 @app.route('/recherche/')
-def ReadBDD_5():
-    conn = sqlite3.connect('bibliotheque.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients;')
-    data = cursor.fetchall()
-    conn.close()
-    return render_template('recherche.html', data=data)
+def recherche():
+    data = get_db_data('SELECT * FROM livres WHERE quantite_disponible > 0;')  # Affiche seulement les livres disponibles
+    return render_template('recherche_livre.html', data=data)
 
+# Route pour la gestion des emprunts
 @app.route('/emprunt/')
-def ReadBDD_6():
-    conn = sqlite3.connect('bibliotheque.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients;')
-    data = cursor.fetchall()
-    conn.close()
-    return render_template('emprunt.html', data=data)
+def emprunt():
+    data = get_db_data('SELECT * FROM emprunts;')  # Liste des emprunts en cours
+    return render_template('emprunt_livre.html', data=data)
 
+# Route pour la gestion des stocks
 @app.route('/gestion/')
-def ReadBDD_7():
-    conn = sqlite3.connect('bibliotheque.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients;')
-    data = cursor.fetchall()
-    conn.close()
+def gestion_stocks():
+    data = get_db_data('SELECT * FROM livres;')  # Affiche la liste complète des livres et leur stock
     return render_template('gestion_stocks.html', data=data)
-
 
                                                                                                                                        
 if __name__ == "__main__":
