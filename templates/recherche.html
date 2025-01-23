@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rechercher un Livre</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Rechercher un Livre</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Retour à l'Accueil</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form action="recherche_livre.php" method="GET">
+            <label for="search">Rechercher par Titre ou Auteur:</label>
+            <input type="text" id="search" name="search" required><br>
+            <button type="submit">Rechercher</button>
+        </form>
+
+        <h2>Livres Disponibles:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Auteur</th>
+                    <th>Catégorie</th>
+                    <th>Quantité Disponible</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemple de données -->
+                <tr>
+                    <td>Le Petit Prince</td>
+                    <td>Antoine de Saint-Exupéry</td>
+                    <td>Fiction</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>1984</td>
+                    <td>George Orwell</td>
+                    <td>Dystopie</td>
+                    <td>5</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
