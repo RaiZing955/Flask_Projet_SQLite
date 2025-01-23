@@ -1,7 +1,3 @@
--- Création de la base de données
-CREATE DATABASE IF NOT EXISTS Bibliotheque;
-USE Bibliotheque;
-
 -- Table des utilisateurs
 CREATE TABLE Utilisateurs (
     id INT AUTO_INCREMENT PRIMARY KEY, -- Identifiant unique de l'utilisateur
