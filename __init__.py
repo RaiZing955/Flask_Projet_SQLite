@@ -39,7 +39,9 @@ def authentification():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if username == 'admin' and password == 'password':  # Remplacer par une vérification sécurisée
+
+        # Accepter n'importe quel utilisateur, ou ajouter une simple condition
+        if username and password:  # Vérifier si les champs ne sont pas vides
             session['authentifie'] = True
             return redirect(url_for('index'))  # Rediriger vers la page des livres après authentification
         else:
