@@ -22,7 +22,7 @@ def lecture():
         # Rediriger vers la page d'authentification si l'utilisateur n'est pas authentifié
         return redirect(url_for('authentification'))
 
-  # Si l'utilisateur est authentifié
+    # Si l'utilisateur est authentifié
     return "<h2>Bravo, vous êtes authentifié</h2>"
 
 @app.route('/authentification', methods=['GET', 'POST'])
@@ -31,13 +31,21 @@ def authentification():
         # Vérifier les identifiants
         if request.form['username'] == 'admin' and request.form['password'] == 'password': # password à cacher par la suite
             session['authentifie'] = True
-            # Rediriger vers la route lecture après une authentification réussie
+            # Rediriger vers la route index après une authentification réussie
             return redirect(url_for('index'))
         else:
             # Afficher un message d'erreur si les identifiants sont incorrects
             return render_template('formulaire_authentification.html', error=True)
 
     return render_template('formulaire_authentification.html', error=False)
+
+@app.route('/index')
+def index():
+    # Vérifier si l'utilisateur est authentifié
+    if not est_authentifie():
+        return redirect(url_for('authentification'))
+    
+    return render_template('index.html')  # Afficher la page d'accueil (index)
 
 @app.route('/fiche_client/<int:post_id>')
 def Readfiche(post_id):
@@ -183,6 +191,6 @@ def gestion_stocks():
     stocks = cursor.fetchall()
     conn.close()
     return render_template('gestion_stocks.html', stocks=stocks)
-                                                                                                                                       
+
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)
