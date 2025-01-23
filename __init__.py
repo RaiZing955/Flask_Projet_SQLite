@@ -12,7 +12,7 @@ def est_authentifie():
 def login_requis(f):
     def wrapper(*args, **kwargs):
         if not est_authentifie():
-            return redirect(url_for('authentification'))
+            return redirect(url_for('authentification'))  # Rediriger vers la page d'authentification
         return f(*args, **kwargs)
     wrapper.__name__ = f.__name__  # Garde le nom de la fonction originale
     return wrapper
@@ -26,10 +26,12 @@ def get_db_data(query, params=()):
     conn.close()
     return data
 
-# Route pour la page d'accueil
+# Route pour la page d'accueil (authentification)
 @app.route('/')
 def hello_world():
-    return render_template('hello.html')
+    if est_authentifie():
+        return redirect(url_for('index'))  # Si déjà authentifié, rediriger vers la page des livres
+    return redirect(url_for('authentification'))  # Sinon, aller à la page d'authentification
 
 # Route pour l'authentification
 @app.route('/authentification', methods=['GET', 'POST'])
@@ -39,7 +41,7 @@ def authentification():
         password = request.form['password']
         if username == 'admin' and password == 'password':  # Remplacer par une vérification sécurisée
             session['authentifie'] = True
-            return redirect(url_for('index'))
+            return redirect(url_for('index'))  # Rediriger vers la page des livres après authentification
         else:
             return render_template('formulaire_authentification.html', error=True)
     return render_template('formulaire_authentification.html', error=False)
@@ -48,7 +50,7 @@ def authentification():
 @app.route('/deconnexion/')
 def deconnexion():
     session.pop('authentifie', None)
-    return redirect(url_for('hello_world'))
+    return redirect(url_for('hello_world'))  # Rediriger vers la page d'accueil après déconnexion
 
 # Routes protégées (nécessitant une authentification)
 @app.route('/index/')
