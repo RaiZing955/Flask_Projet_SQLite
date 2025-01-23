@@ -86,6 +86,52 @@ def ReadBDD_2():
     conn.close()
     return render_template('search_data.html', data=data)
 
+@app.route('/index/')
+def ReadBDD():
+    conn = sqlite3.connect('bibliotheque.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('index.html', data=data)
+
+@app.route('/enregistrement/')
+def ReadBDD():
+    conn = sqlite3.connect('bibliotheque.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('enregistrement.html', data=data)
+
+@app.route('/recherche/')
+def ReadBDD():
+    conn = sqlite3.connect('bibliotheque.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('recherche.html', data=data)
+
+@app.route('/emprunt/')
+def ReadBDD():
+    conn = sqlite3.connect('bibliotheque.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('emprunt.html', data=data)
+
+@app.route('/gestion/')
+def ReadBDD():
+    conn = sqlite3.connect('bibliotheque.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('gestion_stocks.html', data=data)
+
+
                                                                                                                                        
 if __name__ == "__main__":
   app.run(debug=True)
