@@ -1,41 +1,50 @@
 import sqlite3
 
-# Connexion à la base de données SQLite (elle sera créée si elle n'existe pas)
-conn = sqlite3.connect('bibliotheque.db')
-cursor = conn.cursor()
+def init_db():
+    connection = sqlite3.connect('database.db')
 
-# Création de la table "livres" si elle n'existe pas déjà
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS livres (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        titre TEXT NOT NULL,
-        auteur TEXT NOT NULL,
-        genre TEXT NOT NULL,
-        annee_publication INTEGER,
-        disponible BOOLEAN DEFAULT 1
-    )
-''')
+    with connection:
+        # Exécuter le script SQL pour créer les tables
+        connection.executescript('''
+        CREATE TABLE IF NOT EXISTS clients (
+            ID_client INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom TEXT NOT NULL,
+            prenom TEXT NOT NULL,
+            adresse TEXT NOT NULL
+        );
 
-# Liste des livres à insérer
-livres = [
-    ('Le Petit Prince', 'Antoine de Saint-Exupéry', 'Fiction', 1943),
-    ('1984', 'George Orwell', 'Dystopie', 1949),
-    ('Moby Dick', 'Herman Melville', 'Aventure', 1851),
-    ('Les Misérables', 'Victor Hugo', 'Classique', 1862),
-    ('Le Seigneur des Anneaux', 'J.R.R. Tolkien', 'Fantasy', 1954)
-]
+        CREATE TABLE IF NOT EXISTS Livres (
+            ID_livre INTEGER PRIMARY KEY AUTOINCREMENT,
+            Titre TEXT NOT NULL,
+            Auteur TEXT NOT NULL,
+            Annee_publication INTEGER,
+            Quantite INTEGER NOT NULL CHECK (Quantite >= 0)
+        );
 
-# Insertion des livres dans la table
-cursor.executemany('''
-    INSERT INTO livres (titre, auteur, genre, annee_publication) 
-    VALUES (?, ?, ?, ?)
-''', livres)
+        CREATE TABLE IF NOT EXISTS Emprunts (
+            ID_emprunt INTEGER PRIMARY KEY AUTOINCREMENT,
+            ID_utilisateur TEXT NOT NULL,
+            ID_livre INTEGER NOT NULL,
+            Date_emprunt DATE NOT NULL DEFAULT (DATE('now')),
+            Date_retour DATE,
+            Statut TEXT NOT NULL DEFAULT 'Actif',
+            FOREIGN KEY (ID_livre) REFERENCES Livres (ID_livre)
+        );
+        ''')
 
-# Validation des changements et fermeture de la connexion
-conn.commit()
+        # Ajouter quelques données de test pour les livres
+        connection.executemany(
+            'INSERT INTO Livres (Titre, Auteur, Annee_publication, Quantite) VALUES (?, ?, ?, ?)',
+            [
+                ("1984", "George Orwell", 1949, 5),
+                ("Le Petit Prince", "Antoine de Saint-Exupéry", 1943, 3),
+                ("Harry Potter à l'école des sorciers", "J.K. Rowling", 1997, 7),
+                ("Les Misérables", "Victor Hugo", 1862, 4),
+                ("L'Alchimiste", "Paulo Coelho", 1988, 6)
+            ]
+        )
 
-# Affichage d'un message de succès
-print("Livres ajoutés avec succès dans la base de données.")
+    print("Base de données initialisée avec succès.")
 
-# Fermeture de la connexion
-conn.close()
+if __name__ == "__main__":
+    init_db()
