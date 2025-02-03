@@ -1,7 +1,7 @@
 import sqlite3
 
 def init_db():
-    connection = sqlite3.connect('database.db')
+    connection = sqlite3.connect('database2.db')
 
     with connection:
         # Exécuter le script SQL pour créer les tables
