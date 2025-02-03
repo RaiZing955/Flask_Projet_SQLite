@@ -4,141 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Utilisateur</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #2C3E50;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #ECF0F1;
+        }
+        .navbar {
+            background-color: #1A252F;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: #ECF0F1;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #34495E;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #F1C40F;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input {
+            background-color: #ECF0F1;
+            color: #2C3E50;
+        }
+        .btn {
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-success { background-color: #27AE60; }
+        .btn-danger { background-color: #C0392B; }
+        .btn-warning { background-color: #F39C12; }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th, .table td {
+            border: 1px solid #ECF0F1;
+            padding: 10px;
+            text-align: center;
+        }
+        .table th {
+            background-color: #1A252F;
+            color: #F1C40F;
+        }
+    </style>
 </head>
-<body class="bg-light">
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Bibliothèque</a>
-            <div class="d-flex">
-                <span class="navbar-text text-white me-3">
-                    Bienvenue, {{ session['utilisateur_id'] }}
-                </span>
-                <form action="{{ url_for('logout') }}" method="GET">
-                    <button type="submit" class="btn btn-outline-light btn-sm">Déconnexion</button>
-                </form>
-            </div>
-        </div>
+<body>
+    <nav class="navbar">
+        <a href="#">Bibliothèque</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Déconnexion</a>
     </nav>
-
-    <div class="container mt-4">
-        <!-- Recherche -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Rechercher un livre
-            </div>
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('gerer_livres') }}" class="row g-3">
-                    <div class="col-md-8">
-                        <input type="text" name="recherche" class="form-control" placeholder="Titre, Auteur ou Année">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">Rechercher</button>
-                    </div>
-                    <div class="col-md-2">
-                        <a href="{{ url_for('gerer_livres') }}" class="btn btn-secondary w-100">Reset</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Livres disponibles -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">
-                Livres disponibles
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Titre</th>
-                                <th>Auteur</th>
-                                <th>Année</th>
-                                <th>Quantité</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if livres %}
-                                {% for livre in livres %}
-                                <tr>
-                                    <td>{{ livre[1] }}</td>
-                                    <td>{{ livre[2] }}</td>
-                                    <td>{{ livre[3] }}</td>
-                                    <td>{{ livre[4] }}</td>
-                                    <td>
-                                        {% if livre[4] > 0 %}
-                                        <form method="POST">
-                                            <input type="hidden" name="livre_id" value="{{ livre[0] }}">
-                                            <button type="submit" name="emprunter" class="btn btn-success btn-sm">Emprunter</button>
-                                        </form>
-                                        {% else %}
-                                        <span class="text-danger">Indisponible</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            {% else %}
-                            <tr>
-                                <td colspan="5" class="text-center">Aucun livre trouvé pour cette recherche.</td>
-                            </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Emprunts en cours -->
-        <div class="card">
-            <div class="card-header bg-warning">
-                Mes emprunts en cours
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Titre</th>
-                                <th>Auteur</th>
-                                <th>Date d'emprunt</th>
-                                <th>Statut</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if emprunts %}
-                                {% for emprunt in emprunts %}
-                                <tr>
-                                    <td>{{ emprunt[1] }}</td>
-                                    <td>{{ emprunt[2] }}</td>
-                                    <td>{{ emprunt[3] }}</td>
-                                    <td>{{ emprunt[4] }}</td>
-                                    <td>
-                                        <form method="POST">
-                                            <input type="hidden" name="emprunt_id" value="{{ emprunt[0] }}">
-                                            <button type="submit" name="retourner" class="btn btn-danger btn-sm">Retourner</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            {% else %}
-                            <tr>
-                                <td colspan="5" class="text-center">Aucun emprunt en cours.</td>
-                            </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="container">
+        <h1>Livres Disponibles</h1>
+        <!-- Ajoutez ici la gestion des livres et des emprunts -->
     </div>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
