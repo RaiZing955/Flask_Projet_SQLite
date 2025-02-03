@@ -1,35 +1,30 @@
--- Création de la table des utilisateurs
-CREATE TABLE utilisateurs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    role ENUM('utilisateur', 'administrateur') NOT NULL
+-- Table des livres
+CREATE TABLE Livres (
+    ID_livre INTEGER PRIMARY KEY AUTOINCREMENT,
+    Titre TEXT NOT NULL,
+    Auteur TEXT NOT NULL,
+    Annee_publication INTEGER,
+    Quantite INTEGER NOT NULL
 );
 
--- Création de la table des livres
-CREATE TABLE livres (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    titre VARCHAR(255) NOT NULL,
-    auteur VARCHAR(255) NOT NULL,
-    genre VARCHAR(100),
-    disponible BOOLEAN NOT NULL DEFAULT TRUE,
-    date_ajout TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Table des utilisateurs
+CREATE TABLE Utilisateurs (
+    ID_utilisateur INTEGER PRIMARY KEY AUTOINCREMENT,
+    Nom TEXT NOT NULL,
+    Prenom TEXT NOT NULL,
+    Email TEXT UNIQUE NOT NULL,
+    Mot_de_passe TEXT NOT NULL,
+    Role TEXT CHECK (Role IN ('Admin', 'User')) NOT NULL DEFAULT 'User'
 );
 
--- Création de la table des emprunts
-CREATE TABLE emprunts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_utilisateur INT,
-    id_livre INT,
-    date_emprunt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    date_retour TIMESTAMP,
-    FOREIGN KEY(id_utilisateur) REFERENCES utilisateurs(id),
-    FOREIGN KEY(id_livre) REFERENCES livres(id)
-);
-
--- Création de la table des stocks
-CREATE TABLE stocks (
-    id_livre INT,
-    quantite INT NOT NULL DEFAULT 0,
-    FOREIGN KEY(id_livre) REFERENCES livres(id)
+-- Table des emprunts
+CREATE TABLE Emprunts (
+    ID_emprunt INTEGER PRIMARY KEY AUTOINCREMENT,
+    ID_utilisateur INTEGER NOT NULL,
+    ID_livre INTEGER NOT NULL,
+    Date_emprunt DATE NOT NULL DEFAULT (DATE('now')),
+    Date_retour DATE,
+    Statut TEXT CHECK (Statut IN ('En cours', 'Terminé')) NOT NULL DEFAULT 'En cours',
+    FOREIGN KEY(ID_utilisateur) REFERENCES Utilisateurs(ID_utilisateur),
+    FOREIGN KEY(ID_livre) REFERENCES Livres(ID_livre)
 );
