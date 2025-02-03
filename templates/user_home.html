@@ -1,88 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Utilisateur</title>
     <style>
         body {
-            background-color: #2C3E50;
+            background-color: #f8f9fa;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            color: #ECF0F1;
         }
         .navbar {
-            background-color: #1A252F;
+            background-color: #1f3b73;
+            color: white;
             padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .navbar a {
-            color: #ECF0F1;
-            text-decoration: none;
-            font-size: 18px;
-        }
         .container {
-            width: 90%;
-            max-width: 900px;
-            margin: 40px auto;
-            background-color: #34495E;
-            padding: 20px;
+            width: 80%;
+            margin: 20px auto;
+        }
+        .card {
+            background: white;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
-        h1 {
-            text-align: center;
-            color: #F1C40F;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        input, button {
-            width: 100%;
+        .card-header {
+            background-color: #1f3b73;
+            color: white;
             padding: 10px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        input {
-            background-color: #ECF0F1;
-            color: #2C3E50;
+            font-weight: bold;
+            border-radius: 5px 5px 0 0;
         }
         .btn {
+            padding: 10px;
+            border: none;
             cursor: pointer;
-            color: white;
-            font-weight: bold;
+            border-radius: 5px;
         }
-        .btn-success { background-color: #27AE60; }
-        .btn-danger { background-color: #C0392B; }
-        .btn-warning { background-color: #F39C12; }
-        .table {
+        .btn-primary {
+            background-color: #1f3b73;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-warning {
+            background-color: #c9a227;
+            color: white;
+        }
+        .btn-danger {
+            background-color: #b23b3b;
+            color: white;
+        }
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
-        .table th, .table td {
-            border: 1px solid #ECF0F1;
+        th, td {
             padding: 10px;
-            text-align: center;
+            border: 1px solid #ddd;
+            text-align: left;
         }
-        .table th {
-            background-color: #1A252F;
-            color: #F1C40F;
+        th {
+            background-color: #1f3b73;
+            color: white;
         }
     </style>
 </head>
 <body>
+
+    <!-- Navbar -->
     <nav class="navbar">
-        <a href="#">Bibliothèque</a>
-        <a href="{{ url_for('logout') }}" class="btn btn-danger">Déconnexion</a>
+        <span>Bibliothèque</span>
+        <div>
+            <span>Bienvenue, {{ session['utilisateur_id'] }}</span>
+            <form action="{{ url_for('logout') }}" method="GET" style="display: inline;">
+                <button type="submit" class="btn btn-secondary">Déconnexion</button>
+            </form>
+        </div>
     </nav>
+
     <div class="container">
-        <h1>Livres Disponibles</h1>
-        <!-- Ajoutez ici la gestion des livres et des emprunts -->
+        <!-- Recherche -->
+        <div class="card">
+            <div class="card-header">Rechercher un livre</div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('gerer_livres') }}">
+                    <input type="text" name="recherche" placeholder="Titre, Auteur ou Année" style="width: 80%; padding: 10px;">
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                    <a href="{{ url_for('gerer_livres') }}" class="btn btn-secondary">Réinitialiser</a>
+                </form>
+            </div>
+        </div>
+
+        <!-- Livres disponibles -->
+        <div class="card">
+            <div class="card-header">Livres disponibles</div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Auteur</th>
+                            <th>Année</th>
+                            <th>Quantité</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if livres %}
+                            {% for livre in livres %}
+                            <tr>
+                                <td>{{ livre[1] }}</td>
+                                <td>{{ livre[2] }}</td>
+                                <td>{{ livre[3] }}</td>
+                                <td>{{ livre[4] }}</td>
+                                <td>
+                                    {% if livre[4] > 0 %}
+                                    <form method="POST" style="display: inline;">
+                                        <input type="hidden" name="livre_id" value="{{ livre[0] }}">
+                                        <button type="submit" name="emprunter" class="btn btn-warning">Emprunter</button>
+                                    </form>
+                                    {% else %}
+                                    <span class="text-danger">Indisponible</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">Aucun livre trouvé pour cette recherche.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Emprunts en cours -->
+        <div class="card">
+            <div class="card-header">Mes emprunts en cours</div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Auteur</th>
+                            <th>Date d'emprunt</th>
+                            <th>Statut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if emprunts %}
+                            {% for emprunt in emprunts %}
+                            <tr>
+                                <td>{{ emprunt[1] }}</td>
+                                <td>{{ emprunt[2] }}</td>
+                                <td>{{ emprunt[3] }}</td>
+                                <td>{{ emprunt[4] }}</td>
+                                <td>
+                                    <form method="POST" style="display: inline;">
+                                        <input type="hidden" name="emprunt_id" value="{{ emprunt[0] }}">
+                                        <button type="submit" name="retourner" class="btn btn-danger">Retourner</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">Aucun emprunt en cours.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
 </body>
 </html>
